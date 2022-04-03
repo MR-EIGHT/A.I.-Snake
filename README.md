@@ -4,4 +4,4 @@ This project is a classic-snake-game implemented in Python with heuristic algori
 
 ### Authors:
 * Mehrdad Heshmat
-* Vafa Trighi
+* Vafa Tarighi
