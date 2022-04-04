@@ -1,68 +1,87 @@
 # import pygame
+import numpy as np
 import random
-import enum
 
-class Move(enum.Enum):
-    Up = 1
-    Down = 2
-    Right = 3
-    Left = 4
+Up = np.array([0, -1])
+Down = np.array([0, 1])
+Right = np.array([1, 0])
+Left = np.array([-1, 0])
 class SnakeGame:
     
     def __init__(self, scale) -> None:
         self.scale = scale
+        self.upper_bound = np.array([scale, scale])
+        self.lower_bound = np.array([0, 0])
         # self.board = [[0] * scale] * scale
-        self.board = [[0 for i in range(scale)] for j in range(scale)]
+        # self.board = [[0 for i in range(scale)] for j in range(scale)]
         self.body = []
         center = int(scale / 2)
-        self.head = [center, center]
-        self.board[self.head[0]][self.head[1]] = 1
+        self.head = np.array([center, center])
+        # self.board[self.head[0]][self.head[1]] = 1
+        self.__spawn_apple()
         self.len = 0
         
     
-    def spawn_apple(self):
-        spawned = False
-        while not spawned:
-            apple = [random.randint(0, self.scale-1), random.randint(0, self.scale-1)]
-            if self.board[apple[0]][apple[1]] == 0:
+    def __spawn_apple(self):
+        while True:
+            # create a random apple
+            apple = np.array([random.randint(0, self.scale-1), random.randint(0, self.scale-1)])
+            # check if apple didn't fall on snakes head
+            if (apple == self.head).all():
+                continue
+            # check if apple didn't fall on snakes body
+            failed = False
+            for bodypart in self.body:
+                if (bodypart == apple).all():
+                    failed = True
+                    break
+                    
+            # accept apple and return
+            if not failed:
                 self.apple = apple
-                self.board[apple[0]][apple[1]] = 2
-                spawned = True
+                break
                 
-    def move(self, move: Move):
+                
+    def move(self, move):
         # storing head for later
-        new_head = self.head.copy()
+        new_head = np.copy(self.head)
 
         # change head position
-        if move == Move.Up:
-            new_head[1] -= 1
-        if move == Move.Down:
-            new_head[1] += 1
-        if move == Move.Right:
-            new_head[0] += 1
-        if move == Move.Left:
-            new_head[0] -= 1
+        # if move == Move.Up:
+        #     new_head[1] += Move.Up
+        # if move == Move.Down:
+        #     new_head[1] += Move.D
+        # if move == Move.Right:
+        #     new_head[0] += 1
+        # if move == Move.Left:
+        #     new_head[0] -= 1
+        new_head += move
         
         # check for Border Collision
-        if new_head[0] >= self.scale or new_head[0] < 0 or new_head[1] >= self.scale or new_head[1] < 0:
+        if (new_head >= self.upper_bound).any() or (new_head < self.lower_bound).any():
             return False
         
         # check for Body Collision
-        if self.board[new_head[0]][new_head[1]] == 1:
-            return False
+        for bodypart in self.body:
+            if (new_head == bodypart).all():
+                return False
+
+        # if self.board[new_head[0]][new_head[1]] == 1:
+        #     return False
 
         # check for Apple Eating
         grow = False
-        if self.board[new_head[0]][new_head[1]] == 2:
+        if (new_head == self.apple).all():
             if self.len != 0:
                 self.body.append(
-                    self.body.append(self.body[self.len-1].copy())
+                    self.body[self.len-1].copy()
                 )
             else:
                 self.body.append(
                     self.head.copy()
                 )
             self.len += 1
+            self.__spawn_apple()
             grow = True
         
         prev = self.head
@@ -77,22 +96,49 @@ class SnakeGame:
             
             for i in range(0, r):
                 new_pos = prev
-                prev = self.body[i].copy()
+                prev = self.body[i]
                 self.body[i] = new_pos
         
-        # cleaning tail cell in board
-        if not grow:
-            tail = prev
-            self.board[tail[0]][tail[1]] = 0
+        # # cleaning tail cell in board
+        # if not grow:
+        #     tail = prev
+        #     self.board[tail[0]][tail[1]] = 0
         
-        # mark new head possition on board
-        self.board[self.head[0]][self.head[1]] = 1
+        # # mark new head possition on board
+        # self.board[self.head[0]][self.head[1]] = 1
 
         return True
 
     def print_board(self):
-        for y in range(self.scale):
-            for x in range(self.scale):
-                print(self.board[x][y], " ", end='')
+        scale = self.scale
+        head = self.head
+        apple = self.apple
+        
+        # create empty board
+        board = np.zeros((scale, scale), dtype=int)
+        # mark head
+        board[head[0]][head[1]] = 1
+        # mark body
+        for bodypart in self.body:
+            board[bodypart[0]][bodypart[1]] = 1
+        # mark apple
+        board[apple[0]][apple[1]] = 2
+        
+        # print board
+        for y in range(scale):
+            for x in range(scale):
+                print(board[x][y], " ", end='')
             print()
         print()
+
+sg = SnakeGame(11)
+
+sg.move(Down)
+sg.move(Down)
+sg.move(Down)
+sg.move(Down)
+sg.move(Down)
+sg.move(Down)
+
+
+sg.print_board()
