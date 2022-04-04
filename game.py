@@ -1,4 +1,3 @@
-# import pygame
 import numpy as np
 import random
 
@@ -6,8 +5,10 @@ Up = np.array([0, -1])
 Down = np.array([0, 1])
 Right = np.array([1, 0])
 Left = np.array([-1, 0])
+
+
 class SnakeGame:
-    
+
     def __init__(self, scale) -> None:
         self.scale = scale
         self.upper_bound = np.array([scale, scale])
@@ -20,12 +21,11 @@ class SnakeGame:
         # self.board[self.head[0]][self.head[1]] = 1
         self.__spawn_apple()
         self.len = 0
-        
-    
+
     def __spawn_apple(self):
         while True:
             # create a random apple
-            apple = np.array([random.randint(0, self.scale-1), random.randint(0, self.scale-1)])
+            apple = np.array([random.randint(0, self.scale - 1), random.randint(0, self.scale - 1)])
             # check if apple didn't fall on snakes head
             if (apple == self.head).all():
                 continue
@@ -35,13 +35,12 @@ class SnakeGame:
                 if (bodypart == apple).all():
                     failed = True
                     break
-                    
+
             # accept apple and return
             if not failed:
                 self.apple = apple
                 break
-                
-                
+
     def move(self, move):
         # storing head for later
         new_head = np.copy(self.head)
@@ -56,11 +55,11 @@ class SnakeGame:
         # if move == Move.Left:
         #     new_head[0] -= 1
         new_head += move
-        
+
         # check for Border Collision
         if (new_head >= self.upper_bound).any() or (new_head < self.lower_bound).any():
             return False
-        
+
         # check for Body Collision
         for bodypart in self.body:
             if (new_head == bodypart).all():
@@ -74,7 +73,7 @@ class SnakeGame:
         if (new_head == self.apple).all():
             if self.len != 0:
                 self.body.append(
-                    self.body[self.len-1].copy()
+                    self.body[self.len - 1].copy()
                 )
             else:
                 self.body.append(
@@ -83,27 +82,27 @@ class SnakeGame:
             self.len += 1
             self.__spawn_apple()
             grow = True
-        
+
         prev = self.head
         self.head = new_head
-        
+
         # moving body forward
         if self.len > 0:
             if grow:
                 r = self.len - 1
             else:
                 r = self.len
-            
+
             for i in range(0, r):
                 new_pos = prev
                 prev = self.body[i]
                 self.body[i] = new_pos
-        
+
         # # cleaning tail cell in board
         # if not grow:
         #     tail = prev
         #     self.board[tail[0]][tail[1]] = 0
-        
+
         # # mark new head possition on board
         # self.board[self.head[0]][self.head[1]] = 1
 
@@ -113,7 +112,7 @@ class SnakeGame:
         scale = self.scale
         head = self.head
         apple = self.apple
-        
+
         # create empty board
         board = np.zeros((scale, scale), dtype=int)
         # mark head
@@ -123,13 +122,14 @@ class SnakeGame:
             board[bodypart[0]][bodypart[1]] = 1
         # mark apple
         board[apple[0]][apple[1]] = 2
-        
+
         # print board
         for y in range(scale):
             for x in range(scale):
                 print(board[x][y], " ", end='')
             print()
         print()
+
 
 sg = SnakeGame(11)
 
@@ -139,6 +139,5 @@ sg.move(Down)
 sg.move(Down)
 sg.move(Down)
 sg.move(Down)
-
 
 sg.print_board()
