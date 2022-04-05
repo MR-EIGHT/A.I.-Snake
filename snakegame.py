@@ -1,10 +1,10 @@
 import numpy as np
 import random
 
-Up = np.array([0, -1])
-Down = np.array([0, 1])
-Right = np.array([1, 0])
-Left = np.array([-1, 0])
+UP = np.array([0, -1])
+DOWN = np.array([0, 1])
+RIGHT = np.array([1, 0])
+LEFT = np.array([-1, 0])
 
 
 class SnakeGame:
@@ -13,16 +13,18 @@ class SnakeGame:
         self.scale = scale
         self.upper_bound = np.array([scale, scale])
         self.lower_bound = np.array([0, 0])
+        self.eaten = False
         # self.board = [[0] * scale] * scale
         # self.board = [[0 for i in range(scale)] for j in range(scale)]
         self.body = []
-        center = int(scale / 2)
+        center = scale // 2
         self.head = np.array([center, center])
         # self.board[self.head[0]][self.head[1]] = 1
-        self.__spawn_apple()
+        self.spawn_apple()
         self.len = 0
+        self.total_moves = 0
 
-    def __spawn_apple(self):
+    def spawn_apple(self):
         while True:
             # create a random apple
             apple = np.array([random.randint(0, self.scale - 1), random.randint(0, self.scale - 1)])
@@ -40,6 +42,7 @@ class SnakeGame:
             if not failed:
                 self.apple = apple
                 break
+        self.eaten = False
 
     def move(self, move):
         # storing head for later
@@ -80,16 +83,19 @@ class SnakeGame:
                     self.head.copy()
                 )
             self.len += 1
-            self.__spawn_apple()
+            self.eaten = True
             grow = True
 
         prev = self.head
         self.head = new_head
 
+        self.total_moves += 1
+        
         # moving body forward
         if self.len > 0:
             if grow:
                 r = self.len - 1
+                self.total_moves = 0
             else:
                 r = self.len
 
@@ -105,7 +111,7 @@ class SnakeGame:
 
         # # mark new head possition on board
         # self.board[self.head[0]][self.head[1]] = 1
-
+        # self.print_board()
         return True
 
     def print_board(self):
@@ -131,13 +137,13 @@ class SnakeGame:
         print()
 
 
-sg = SnakeGame(11)
+# sg = SnakeGame(11)
 
-sg.move(Down)
-sg.move(Down)
-sg.move(Down)
-sg.move(Down)
-sg.move(Down)
-sg.move(Down)
+# sg.move(Down)
+# sg.move(Down)
+# sg.move(Down)
+# sg.move(Down)
+# sg.move(Down)
+# sg.move(Down)
 
-sg.print_board()
+# sg.print_board()
