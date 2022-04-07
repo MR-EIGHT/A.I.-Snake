@@ -164,4 +164,4 @@ def main(algo='A*'):
 
 
 if __name__ == '__main__':
-    main('BFS')
+    main()

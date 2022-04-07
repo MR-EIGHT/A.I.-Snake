@@ -32,9 +32,3 @@ def solve_astar(game: sg.SnakeGame):
             g = n.state.total_moves
             f = h + g
             heappush(state_list, (f, n))
-
-
-
-
-
-

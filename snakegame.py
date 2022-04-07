@@ -90,7 +90,7 @@ class SnakeGame:
         self.head = new_head
 
         self.total_moves += 1
-        
+
         # moving body forward
         if self.len > 0:
             if grow:
@@ -135,7 +135,6 @@ class SnakeGame:
                 print(board[x][y], " ", end='')
             print()
         print()
-
 
 # sg = SnakeGame(11)
 
