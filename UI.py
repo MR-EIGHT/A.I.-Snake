@@ -3,6 +3,8 @@ import random
 import pygame
 import tkinter as tk
 from tkinter import messagebox
+
+import Menu
 import snakegame as sg
 from AI import astar
 from AI import bfs
@@ -105,12 +107,13 @@ def message_box(subject, content):
 def game_over(snake):
     print("Score:", len(snake.body))
     message_box('You Win!', 'Play again...')
+    Menu.show_menu()
 
 
 def main(algo='A*'):
     global scale, wsize, snake_game
     wsize = 500  # window width and height
-    scale = 15  # game grid size
+    scale = 5  # game grid size
 
     win = pygame.display.set_mode((wsize, wsize), depth=2)
     clock = pygame.time.Clock()
@@ -145,6 +148,7 @@ def main(algo='A*'):
             # if game ends
             if moves is None or len(moves) == 0:
                 game_over(snake_game)
+
                 break
 
             for m in moves:
@@ -164,4 +168,5 @@ def main(algo='A*'):
 
 
 if __name__ == '__main__':
-    main()
+    Menu.show_menu()
+    # main('BFS')
