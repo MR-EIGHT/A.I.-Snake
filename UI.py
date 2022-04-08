@@ -30,7 +30,7 @@ def redraw_window(surface):
     surface.fill((0, 0, 0))
     draw_snake(surface)
     draw_apple(surface)
-    draw_grid(wsize, scale, surface)
+    # draw_grid(wsize, scale, surface)
     pygame.display.update()
     pass
 
@@ -110,7 +110,7 @@ def game_over(snake):
 def main(algo='A*'):
     global scale, wsize, snake_game
     wsize = 500  # window width and height
-    scale = 5  # game grid size
+    scale = 15  # game grid size
 
     win = pygame.display.set_mode((wsize, wsize), depth=2)
     clock = pygame.time.Clock()

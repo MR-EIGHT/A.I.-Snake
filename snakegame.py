@@ -1,6 +1,7 @@
 import numpy as np
 import random
 
+# constats for snake moves
 UP = np.array([0, -1])
 DOWN = np.array([0, 1])
 RIGHT = np.array([1, 0])
@@ -8,23 +9,32 @@ LEFT = np.array([-1, 0])
 
 
 class SnakeGame:
+    """Snake Game class
+
+    SnakeGame class creates and records a new snake game state and provides methods for playing the game
+
+    Returns:
+    SnakeGame: snake game object storing current game state like snake body and head possition on the board, total moves, snake length and some other data
+    """
 
     def __init__(self, scale) -> None:
         self.scale = scale
         self.upper_bound = np.array([scale, scale])
         self.lower_bound = np.array([0, 0])
         self.eaten = False
-        # self.board = [[0] * scale] * scale
-        # self.board = [[0 for i in range(scale)] for j in range(scale)]
         self.body = []
         center = scale // 2
         self.head = np.array([center, center])
-        # self.board[self.head[0]][self.head[1]] = 1
         self.spawn_apple()
         self.len = 0
         self.total_moves = 0
 
+        
     def spawn_apple(self):
+        """Apple spawner
+            spawns a new apple on the board
+        """
+        
         while True:
             # create a random apple
             apple = np.array([random.randint(0, self.scale - 1), random.randint(0, self.scale - 1)])
@@ -44,19 +54,16 @@ class SnakeGame:
                 break
         self.eaten = False
 
-    def move(self, move):
+        
+    def move(self, move) -> bool:
+        """Move snake
+            moves snake head to specified direction if possible and returns True, otherwise returns false
+        """
+        
         # storing head for later
         new_head = np.copy(self.head)
 
-        # change head position
-        # if move == Move.Up:
-        #     new_head[1] += Move.Up
-        # if move == Move.Down:
-        #     new_head[1] += Move.D
-        # if move == Move.Right:
-        #     new_head[0] += 1
-        # if move == Move.Left:
-        #     new_head[0] -= 1
+        # moving new_head
         new_head += move
 
         # check for Border Collision
@@ -68,8 +75,6 @@ class SnakeGame:
             if (new_head == bodypart).all():
                 return False
 
-        # if self.board[new_head[0]][new_head[1]] == 1:
-        #     return False
 
         # check for Apple Eating
         grow = False
@@ -89,6 +94,7 @@ class SnakeGame:
         prev = self.head
         self.head = new_head
 
+        # increase total moves of the snake
         self.total_moves += 1
 
         # moving body forward
@@ -104,45 +110,4 @@ class SnakeGame:
                 prev = self.body[i]
                 self.body[i] = new_pos
 
-        # # cleaning tail cell in board
-        # if not grow:
-        #     tail = prev
-        #     self.board[tail[0]][tail[1]] = 0
-
-        # # mark new head possition on board
-        # self.board[self.head[0]][self.head[1]] = 1
-        # self.print_board()
         return True
-
-    def print_board(self):
-        scale = self.scale
-        head = self.head
-        apple = self.apple
-
-        # create empty board
-        board = np.zeros((scale, scale), dtype=int)
-        # mark head
-        board[head[0]][head[1]] = 1
-        # mark body
-        for bodypart in self.body:
-            board[bodypart[0]][bodypart[1]] = 1
-        # mark apple
-        board[apple[0]][apple[1]] = 2
-
-        # print board
-        for y in range(scale):
-            for x in range(scale):
-                print(board[x][y], " ", end='')
-            print()
-        print()
-
-# sg = SnakeGame(11)
-
-# sg.move(Down)
-# sg.move(Down)
-# sg.move(Down)
-# sg.move(Down)
-# sg.move(Down)
-# sg.move(Down)
-
-# sg.print_board()

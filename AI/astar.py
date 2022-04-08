@@ -1,34 +1,39 @@
 from heapq import *
+
 from .utils import *
 
 
 def solve_astar(game: sg.SnakeGame):
+    """A* algorithm implementation to solve Snake Game
+
+    Args:
+        game (SnakeGame): game object
+
+    Returns:
+        list: moves that should be taken to eat the apple
+    """
+    
+    # root node of the search tree of the game
     root_state = Node(game, None)
 
+    # creating a priority queue to store and fetch Nodes with node.minimum(g + h)
     state_list = []
     heapify(state_list)
+    
+    # adding root state to priority queue
+    h = heuristic(root_state)
+    g = 0
+    heappush(state_list, (h+g, root_state))
 
-    next_moves = get_child_states(root_state)
-
-    for nm in next_moves:
-        h = heuristic(nm)
-        if h == 0:
-            return [nm.move]
-        g = 1
-        f = h + g
-        heappush(state_list, (f, nm))
-
+    # fetching nodes with minimum heuristic and move count and checking if they're the answer, otherwise pushing them to priority queue
     while len(state_list) != 0:
-        nm: Node = heappop(state_list)[1]
+        (h, nm) = heappop(state_list)
+        if h == 0:
+            return collect_answer(nm)
 
         next_moves = get_child_states(nm)
 
         for n in next_moves:
             h = heuristic(n)
-            # if h == 1:
-            #     print("close to answer")
-            if h == 0:
-                return collect_answer(n)
             g = n.state.total_moves
-            f = h + g
-            heappush(state_list, (f, n))
+            heappush(state_list, (h+g, n))
