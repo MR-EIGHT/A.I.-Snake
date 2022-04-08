@@ -1,13 +1,14 @@
 import pygame_menu
 from pygame_menu.examples import create_example_window
 from typing import Tuple
+
 import UI
 
 surface = create_example_window('Snake Game', (600, 400))
 algorithm = 'A*'
 
 
-def set_algorithm(selected: Tuple) -> None:
+def set_algorithm(selected: Tuple, val) -> None:
     global algorithm
     algorithm = selected[0][0]
 

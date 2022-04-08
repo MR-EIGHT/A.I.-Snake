@@ -20,6 +20,4 @@ def solve_bfs(game: sg.SnakeGame):
                     h = heuristic(n)
                     if h == 0:
                         return collect_answer(n)
-                    g = 1
-                    f = h + g
-                    states.put((f, n))
+                    states.put((h + 1, n))
