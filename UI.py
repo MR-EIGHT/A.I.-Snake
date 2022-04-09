@@ -6,8 +6,7 @@ from tkinter import messagebox
 
 import Menu
 import snakegame as sg
-from AI import astar
-from AI import bfs
+from AI import astar, bfs, dfs
 
 SNAKE_COLOR = (255, 0, 0)
 APPLE_COLOR = (0, 255, 0)
@@ -112,8 +111,8 @@ def game_over(snake):
 
 def main(algo='A*'):
     global scale, wsize, snake_game
-    wsize = 500  # window width and height
-    scale = 5  # game grid size
+    wsize = 300  # window width and height
+    scale = 3  # game grid size
 
     win = pygame.display.set_mode((wsize, wsize), depth=2)
     clock = pygame.time.Clock()
@@ -138,6 +137,11 @@ def main(algo='A*'):
                 print("<- Entering BFS")
                 moves = bfs.solve_bfs(snake_game)
                 print("-> Exiting BFS")
+
+            elif algo == 'DFS':
+                print("<- Entering DFS")
+                moves = dfs.solve_dfs(snake_game)
+                print("-> Exiting DFS")
 
             else:
                 print("<- Entering A*")
@@ -168,5 +172,5 @@ def main(algo='A*'):
 
 
 if __name__ == '__main__':
-    Menu.show_menu()
-    # main('BFS')
+    # Menu.show_menu()
+    main('DFS')

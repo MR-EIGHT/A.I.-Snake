@@ -29,12 +29,11 @@ class SnakeGame:
         self.len = 0
         self.total_moves = 0
 
-        
     def spawn_apple(self):
         """Apple spawner
             spawns a new apple on the board
         """
-        
+
         while True:
             # create a random apple
             apple = np.array([random.randint(0, self.scale - 1), random.randint(0, self.scale - 1)])
@@ -54,12 +53,11 @@ class SnakeGame:
                 break
         self.eaten = False
 
-        
     def move(self, move) -> bool:
         """Move snake
             moves snake head to specified direction if possible and returns True, otherwise returns false
         """
-        
+
         # storing head for later
         new_head = np.copy(self.head)
 
@@ -74,7 +72,6 @@ class SnakeGame:
         for bodypart in self.body:
             if (new_head == bodypart).all():
                 return False
-
 
         # check for Apple Eating
         grow = False

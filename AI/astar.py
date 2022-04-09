@@ -12,18 +12,18 @@ def solve_astar(game: sg.SnakeGame):
     Returns:
         list: moves that should be taken to eat the apple
     """
-    
+
     # root node of the search tree of the game
     root_state = Node(game, None)
 
     # creating a priority queue to store and fetch Nodes with node.minimum(g + h)
     state_list = []
     heapify(state_list)
-    
+
     # adding root state to priority queue
     h = heuristic(root_state)
     g = 0
-    heappush(state_list, (h+g, root_state))
+    heappush(state_list, (h + g, root_state))
 
     # fetching nodes with minimum heuristic and move count and checking if they're the answer, otherwise pushing them to priority queue
     while len(state_list) != 0:
@@ -36,4 +36,4 @@ def solve_astar(game: sg.SnakeGame):
         for n in next_moves:
             h = heuristic(n)
             g = n.state.total_moves
-            heappush(state_list, (h+g, n))
+            heappush(state_list, (h + g, n))

@@ -8,7 +8,7 @@ class Node:
     Returns:
         Node: search tree node
     """
-    
+
     def __init__(self, state, parent, move=None):
         self.move = move
         self.state = state
