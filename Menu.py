@@ -1,7 +1,6 @@
 import pygame_menu
 from pygame_menu.examples import create_example_window
 from typing import Tuple
-
 import UI
 
 surface = create_example_window('Snake Game', (600, 400))
@@ -32,7 +31,7 @@ menu = pygame_menu.Menu(
     width=400
 )
 
-menu.add.selector('Algorithm: ', [('A*', 1), ('BFS', 2)], onchange=set_algorithm)
+menu.add.selector('Algorithm: ', [('A*', 1), ('BFS', 2), ('DFS', 3), ('Human', 4)], onchange=set_algorithm)
 menu.add.button('Play', start_the_game)
 menu.add.button('Quit', pygame_menu.events.EXIT)
 

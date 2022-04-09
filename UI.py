@@ -3,16 +3,14 @@ import random
 import pygame
 import tkinter as tk
 from tkinter import messagebox
-
 import Menu
 import snakegame as sg
-from AI import astar, dfs
-from AI import bfs
+from AI import astar, bfs, dfs
 
 SNAKE_COLOR = (255, 0, 0)
 APPLE_COLOR = (0, 255, 0)
 
-SCALE = 8
+SCALE = 20
 W_SIZE = 500
 CUBE = W_SIZE // SCALE
 
@@ -272,19 +270,34 @@ def main(algo='A*'):
                 moves = dfs.solve_dfs(snake_game)
                 print("-> Exiting DFS")
 
+            elif algo == 'Human':
+                keys = pygame.key.get_pressed()
+
+                for _ in keys:
+                    moves = []
+                    if keys[pygame.K_LEFT]:
+                        moves.append(sg.LEFT)
+                    elif keys[pygame.K_RIGHT]:
+                        moves.append(sg.RIGHT)
+                    elif keys[pygame.K_UP]:
+                        moves.append(sg.UP)
+                    elif keys[pygame.K_DOWN]:
+                        moves.append(sg.DOWN)
+                    else:
+                        moves.append(last_move)
+
             else:
                 print("<- Entering A*")
                 # print("Apple: ", snake_game.apple)
                 moves = astar.solve_astar(snake_game)
-
                 print("-> Exiting A*")
             # if game ends
-            if moves is None or len(moves) == 0:
+            if algo != 'Human' and (moves is None or len(moves) == 0):
                 game_over(snake_game)
-
                 break
 
             for m in moves:
+                last_move = m
 
                 pygame.time.delay(100)  # lowering this will make it faster
                 clock.tick(5)  # lowering this will make it slower
@@ -294,6 +307,11 @@ def main(algo='A*'):
                 #     cm = snake_game.move(m)
                 redraw_window(game_display, m)
 
+                if not cm and algo == 'Human':
+                    print("Score:", len(snake_game.body))
+                    message_box('You Lost!', 'Play again...')
+                    Menu.show_menu()
+
                 if not cm:
                     error("Something went wrong with the algorithm solution")
                     pygame.quit()
@@ -301,5 +319,5 @@ def main(algo='A*'):
 
 
 if __name__ == '__main__':
-    # Menu.show_menu()
-    main('DFS')
+    Menu.show_menu()
+    # main('Human')
