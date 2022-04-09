@@ -6,7 +6,7 @@ from tkinter import messagebox
 
 import Menu
 import snakegame as sg
-from AI import astar
+from AI import astar, dfs
 from AI import bfs
 
 SNAKE_COLOR = (255, 0, 0)
@@ -267,6 +267,11 @@ def main(algo='A*'):
                 moves = bfs.solve_bfs(snake_game)
                 print("-> Exiting BFS")
 
+            elif algo == 'DFS':
+                print("<- Entering DFS")
+                moves = dfs.solve_dfs(snake_game)
+                print("-> Exiting DFS")
+
             else:
                 print("<- Entering A*")
                 # print("Apple: ", snake_game.apple)
@@ -280,7 +285,7 @@ def main(algo='A*'):
                 break
 
             for m in moves:
-                last_move = m
+
                 pygame.time.delay(100)  # lowering this will make it faster
                 clock.tick(5)  # lowering this will make it slower
 
@@ -296,5 +301,5 @@ def main(algo='A*'):
 
 
 if __name__ == '__main__':
-    Menu.show_menu()
-    # main('BFS')
+    # Menu.show_menu()
+    main('DFS')
