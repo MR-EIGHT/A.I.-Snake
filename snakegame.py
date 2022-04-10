@@ -1,3 +1,4 @@
+from typing_extensions import Self
 import numpy as np
 import random
 
@@ -16,18 +17,41 @@ class SnakeGame:
     Returns:
     SnakeGame: snake game object storing current game state like snake body and head possition on the board, total moves, snake length and some other data
     """
+    
+    def new_game(scale: int) -> Self:
+        return SnakeGame(scale)
+    
+    def snapshot(snap: Self) -> Self:
+        return SnakeGame(snap.scale, snap)
 
-    def __init__(self, scale) -> None:
+    def __init__(self, scale, snap=None):
         self.scale = scale
-        self.upper_bound = np.array([scale, scale])
-        self.lower_bound = np.array([0, 0])
-        self.eaten = False
-        self.body = []
-        center = scale // 2
-        self.head = np.array([center, center])
-        self.spawn_apple()
-        self.len = 0
-        self.total_moves = 0
+        if snap != None:
+            self.cells = snap.cells
+            self.upper_bound = snap.upper_bound
+            self.lower_bound = snap.lower_bound
+            self.eaten = snap.eaten
+            self.body = []
+            self.body.extend(snap.body)
+            self.head = snap.head
+            self.apple = snap.apple
+            self.len = snap.len
+            self.total_moves = snap.total_moves
+            
+        else:
+            self.cells = [[None for _ in range(scale)] for _ in range(scale)]
+            for i in range(scale):
+                for j in range(scale):
+                    self.cells[i][j] = np.array([i, j])
+            self.upper_bound = np.array([scale, scale])
+            self.lower_bound = np.array([0, 0])
+            self.eaten = False
+            self.body = []
+            center = scale // 2
+            self.head = self.cells[center][center]
+            self.spawn_apple()
+            self.len = 0
+            self.total_moves = 0
 
     def spawn_apple(self):
         """Apple spawner
@@ -58,15 +82,16 @@ class SnakeGame:
             moves snake head to specified direction if possible and returns True, otherwise returns false
         """
 
-        # storing head for later
-        new_head = np.copy(self.head)
-
-        # moving new_head
-        new_head += move
-
+        (h_i, h_j) = self.head
+        (m_i, m_j) = move
+        
         # check for Border Collision
-        if (new_head >= self.upper_bound).any() or (new_head < self.lower_bound).any():
+        (new_i, new_j) = (h_i+m_i, h_j+m_j)
+        if new_i >= self.scale or new_j >= self.scale or new_i < 0 or new_j < 0:
             return False
+        
+        # new moved head
+        new_head = self.cells[new_i][new_j]
 
         # check for Body Collision
         for bodypart in self.body:
@@ -78,11 +103,11 @@ class SnakeGame:
         if (new_head == self.apple).all():
             if self.len != 0:
                 self.body.append(
-                    self.body[self.len - 1].copy()
+                    self.body[self.len - 1]
                 )
             else:
                 self.body.append(
-                    self.head.copy()
+                    self.head
                 )
             self.len += 1
             self.eaten = True
