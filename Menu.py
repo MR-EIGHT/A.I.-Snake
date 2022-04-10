@@ -3,10 +3,9 @@ from pygame_menu.examples import create_example_window
 from typing import Tuple
 import UI
 
-ALF = 3
 
-M_WIDTH = (UI.W_SIZE * 3) // 2 // 3
-M_HEIGHT = UI.W_SIZE // 3
+M_WIDTH = (UI.W_SIZE * 3) // 2
+M_HEIGHT = UI.W_SIZE
 
 
 surface = create_example_window('Snake Game', (M_WIDTH, M_HEIGHT))
