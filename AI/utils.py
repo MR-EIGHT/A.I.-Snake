@@ -1,3 +1,4 @@
+from math import sqrt
 import snakegame as sg
 from copy import deepcopy
 
@@ -9,11 +10,12 @@ class Node:
         Node: search tree node
     """
 
-    def __init__(self, state, parent, move=None):
+    def __init__(self, state: sg.SnakeGame, parent, move=None):
         self.move = move
+        self.head = str([state.head[0], state.head[1]])
+        print(self.head)
         self.state = state
         self.parent = parent
-        self.visited = False
 
     def __lt__(self, nxt):
         return False
@@ -21,6 +23,13 @@ class Node:
     def __eq__(self, __o: object) -> bool:
         return True
 
+def g_dist(start: Node, end: Node):
+    start_s = start.state
+    end_s = end.state
+    x_dist = abs(start_s.head[0] - end_s.head[0])
+    y_dist = abs(start_s.head[1] - end_s.head[1])
+    
+    return x_dist + y_dist
 
 def heuristic(node: Node):
     """heuristic function
@@ -37,7 +46,7 @@ def heuristic(node: Node):
     x_dist = abs(state.head[0] - state.apple[0])
     y_dist = abs(state.head[1] - state.apple[1])
 
-    return x_dist + y_dist
+    return sqrt(x_dist*x_dist + y_dist*y_dist)
 
 
 def collect_answer(n: Node):
@@ -71,10 +80,10 @@ def get_child_states(root: Node) -> list:
         list: list of new states of the game branched from 'root'
     """
     children = []
-    up = deepcopy(root.state)
-    down = deepcopy(root.state)
-    right = deepcopy(root.state)
-    left = deepcopy(root.state)
+    up = sg.SnakeGame.snapshot(root.state)
+    down = sg.SnakeGame.snapshot(root.state)
+    right = sg.SnakeGame.snapshot(root.state)
+    left = sg.SnakeGame.snapshot(root.state)
 
     if up.move(sg.UP):
         children.append(
