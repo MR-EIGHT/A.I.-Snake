@@ -7,27 +7,25 @@ def solve_dfs(game: sg.SnakeGame):
 
 
 def DFS(s):
-    answer = []
+    # answer = []
     stack = [s]
+    visited = set()
+    visited.add(s.head)
 
     while len(stack) > 0:
         s = stack.pop()
-        if s.visited is False:
-            answer.append(s.move)
-            print(answer)
+        # draw heatmap
+        pygame.time.delay(50)
+        draw_circle(s.state)
+        draw_total_moves(s)
+
+        if s.head not in visited:
+            # answer.append(s.move)
             if heuristic(s) == 0:
-                answer.pop(0)
-                print(answer)
-                return answer
-            s.visited = True
+                return collect_answer(s)
+            visited.add(s.head)
 
         next_moves = get_child_states(s)
         for node in next_moves:
-            if node.visited is False:
-                print(heuristic(node))
-                if heuristic(node) == 0:
-                    answer.append(node.move)
-                    answer.pop(0)
-                    print(answer)
-                    return answer
+            if node.head not in visited:
                 stack.append(node)
