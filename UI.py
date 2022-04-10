@@ -58,7 +58,7 @@ def redraw_window(surface, move):
     surface.fill((60, 60, 60))
     draw_snake(surface, move)
     draw_apple(surface)
-    # draw_grid(wsize, scale, surface)
+    draw_grid(W_SIZE, SCALE, surface)
     pygame.display.update()
     pass
 
@@ -244,7 +244,7 @@ def main(algo='A*'):
     clock = pygame.time.Clock()
 
     while True:
-        snake_game = sg.SnakeGame(SCALE)
+        snake_game = sg.SnakeGame.new_game(SCALE)
         last_move = sg.UP
 
         while True:
