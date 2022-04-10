@@ -3,7 +3,13 @@ from pygame_menu.examples import create_example_window
 from typing import Tuple
 import UI
 
-surface = create_example_window('Snake Game', (600, 400))
+ALF = 3
+
+M_WIDTH = (UI.W_SIZE * 3) // 2 // 3
+M_HEIGHT = UI.W_SIZE // 3
+
+
+surface = create_example_window('Snake Game', (M_WIDTH, M_HEIGHT))
 algorithm = 'A*'
 
 
@@ -25,10 +31,10 @@ def start_the_game() -> None:
 
 
 menu = pygame_menu.Menu(
-    height=300,
-    theme=pygame_menu.themes.THEME_ORANGE,  # you can set the menu's theme here.
+    height=M_HEIGHT,
+    theme=pygame_menu.themes.THEME_DARK,  # you can set the menu's theme here.
     title='Snake Game',
-    width=400
+    width=M_WIDTH
 )
 
 menu.add.selector('Algorithm: ', [('A*', 1), ('BFS', 2), ('DFS', 3), ('Human', 4)], onchange=set_algorithm)
@@ -38,5 +44,5 @@ menu.add.button('Quit', pygame_menu.events.EXIT)
 
 def show_menu():
     global surface
-    surface = create_example_window('Snake Game', (600, 400))
+    surface = create_example_window('Snake Game', (M_WIDTH, M_HEIGHT))
     menu.mainloop(surface)
