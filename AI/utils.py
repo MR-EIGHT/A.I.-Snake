@@ -1,10 +1,9 @@
 from math import sqrt
 import snakegame as sg
-from copy import deepcopy
-
 from snakegame import SnakeGame
 import pygame
 import UI as ui
+
 
 class Node:
     """Search Tree Node
@@ -26,13 +25,15 @@ class Node:
     def __eq__(self, __o: object) -> bool:
         return True
 
+
 def g_dist(start: Node, end: Node):
     start_s = start.state
     end_s = end.state
     x_dist = abs(start_s.head[0] - end_s.head[0])
     y_dist = abs(start_s.head[1] - end_s.head[1])
-    
+
     return x_dist + y_dist
+
 
 def heuristic(node: Node):
     """heuristic function
@@ -49,7 +50,7 @@ def heuristic(node: Node):
     x_dist = abs(state.head[0] - state.apple[0])
     y_dist = abs(state.head[1] - state.apple[1])
 
-    return sqrt(x_dist*x_dist + y_dist*y_dist)
+    return sqrt(x_dist * x_dist + y_dist * y_dist)
 
 
 def collect_answer(n: Node):
@@ -112,10 +113,11 @@ def draw_total_moves(n: Node):
     font = pygame.font.Font('freesansbold.ttf', 20)
     game: SnakeGame = n.state
     cord = get_cord(game)
-    text = font.render(str(game.total_moves).zfill(2), True, (0,0,0), (255,255,255))
+    text = font.render(str(game.total_moves).zfill(2), True, (0, 0, 0), (255, 255, 255))
     textRect = text.get_rect()
     textRect.topleft = cord
     ui.game_display.blit(text, textRect)
+
 
 def draw_circle(game: SnakeGame):
     (i, j) = game.head
@@ -124,16 +126,18 @@ def draw_circle(game: SnakeGame):
     s.fill((255, 0, 0))
     ui.game_display.blit(s, get_cord(game))
     pygame.display.update()
-    
-    
+
 
 def get_cord(game: SnakeGame):
     (i, j) = game.head
     # offset = ui.CUBE // 2
     offset = 0
-    return (i*ui.CUBE + offset, j*ui.CUBE + offset)
+    return i * ui.CUBE + offset, j * ui.CUBE + offset
+
 
 MAX_MOVES = 20
+
+
 def get_radius(game: SnakeGame):
     total_move = game.total_moves
     full_rad = ui.CUBE // 2

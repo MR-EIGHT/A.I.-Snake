@@ -1,4 +1,3 @@
-from typing_extensions import Self
 import numpy as np
 import random
 
@@ -17,16 +16,16 @@ class SnakeGame:
     Returns:
     SnakeGame: snake game object storing current game state like snake body and head possition on the board, total moves, snake length and some other data
     """
-    
-    def new_game(scale: int) -> Self:
+
+    def new_game(scale: int) -> 'SnakeGame':
         return SnakeGame(scale)
-    
-    def snapshot(snap: Self) -> Self:
+
+    def snapshot(snap: 'SnakeGame') -> 'SnakeGame':
         return SnakeGame(snap.scale, snap)
 
     def __init__(self, scale, snap=None):
         self.scale = scale
-        if snap != None:
+        if snap is not None:
             self.cells = snap.cells
             self.upper_bound = snap.upper_bound
             self.lower_bound = snap.lower_bound
@@ -37,7 +36,7 @@ class SnakeGame:
             self.apple = snap.apple
             self.len = snap.len
             self.total_moves = snap.total_moves
-            
+
         else:
             self.cells = [[None for _ in range(scale)] for _ in range(scale)]
             for i in range(scale):
@@ -84,12 +83,12 @@ class SnakeGame:
 
         (h_i, h_j) = self.head
         (m_i, m_j) = move
-        
+
         # check for Border Collision
-        (new_i, new_j) = (h_i+m_i, h_j+m_j)
+        (new_i, new_j) = (h_i + m_i, h_j + m_j)
         if new_i >= self.scale or new_j >= self.scale or new_i < 0 or new_j < 0:
             return False
-        
+
         # new moved head
         new_head = self.cells[new_i][new_j]
 

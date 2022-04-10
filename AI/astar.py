@@ -1,11 +1,6 @@
 from heapq import *
-from logging import root
-
 from snakegame import SnakeGame
-
 from .utils import *
-
-import UI as ui
 import pygame
 
 
@@ -37,7 +32,7 @@ def solve_astar(game: sg.SnakeGame):
     while len(state_list) != 0:
         heapify(state_list)
         (f, nm) = heappop(state_list)
-        
+
         next_moves = get_child_states(nm)
 
         for n in next_moves:
@@ -45,15 +40,15 @@ def solve_astar(game: sg.SnakeGame):
                 print(n.head, " was visited")
                 continue
             visited.add(n.head)
-            
+
             # draw heatmap
             pygame.time.delay(50)
             draw_circle(n.state)
             draw_total_moves(n)
-            
+
             h = heuristic(n)
             if h == 0:
                 return collect_answer(n)
             g = n.state.total_moves
-            f = h*2 + g
+            f = h * 2 + g
             heappush(state_list, (f, n))
