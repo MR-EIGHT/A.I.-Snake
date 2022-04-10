@@ -48,7 +48,6 @@ def solve_astar(game: sg.SnakeGame):
             
             # draw heatmap
             pygame.time.delay(50)
-            # ui.clock.tick(5)
             draw_circle(n.state)
             draw_total_moves(n)
             
@@ -58,37 +57,3 @@ def solve_astar(game: sg.SnakeGame):
             g = n.state.total_moves
             f = h*2 + g
             heappush(state_list, (f, n))
-
-
-
-def draw_total_moves(n: Node):
-    font = pygame.font.Font('freesansbold.ttf', 20)
-    game: SnakeGame = n.state
-    cord = get_cord(game)
-    text = font.render(str(game.total_moves).zfill(2), True, (0,0,0), (255,255,255))
-    textRect = text.get_rect()
-    textRect.topleft = cord
-    ui.game_display.blit(text, textRect)
-
-def draw_circle(game: SnakeGame):
-    (i, j) = game.head
-    s = pygame.Surface((ui.CUBE, ui.CUBE))
-    s.set_alpha(32)
-    s.fill((255, 0, 0))
-    ui.game_display.blit(s, get_cord(game))
-    pygame.display.update()
-    
-    
-
-def get_cord(game: SnakeGame):
-    (i, j) = game.head
-    # offset = ui.CUBE // 2
-    offset = 0
-    return (i*ui.CUBE + offset, j*ui.CUBE + offset)
-
-MAX_MOVES = 20
-def get_radius(game: SnakeGame):
-    total_move = game.total_moves
-    full_rad = ui.CUBE // 2
-    rad = (full_rad // MAX_MOVES) * total_move
-    return rad

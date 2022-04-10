@@ -11,7 +11,7 @@ SNAKE_COLOR = (255, 0, 0)
 APPLE_COLOR = (0, 255, 0)
 
 SCALE = 20
-W_SIZE = 500
+W_SIZE = 1000
 CUBE = W_SIZE // SCALE
 
 game_display = None

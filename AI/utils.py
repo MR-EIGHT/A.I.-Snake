@@ -2,6 +2,9 @@ from math import sqrt
 import snakegame as sg
 from copy import deepcopy
 
+from snakegame import SnakeGame
+import pygame
+import UI as ui
 
 class Node:
     """Search Tree Node
@@ -103,3 +106,36 @@ def get_child_states(root: Node) -> list:
         )
 
     return children
+
+
+def draw_total_moves(n: Node):
+    font = pygame.font.Font('freesansbold.ttf', 20)
+    game: SnakeGame = n.state
+    cord = get_cord(game)
+    text = font.render(str(game.total_moves).zfill(2), True, (0,0,0), (255,255,255))
+    textRect = text.get_rect()
+    textRect.topleft = cord
+    ui.game_display.blit(text, textRect)
+
+def draw_circle(game: SnakeGame):
+    (i, j) = game.head
+    s = pygame.Surface((ui.CUBE, ui.CUBE))
+    s.set_alpha(32)
+    s.fill((255, 0, 0))
+    ui.game_display.blit(s, get_cord(game))
+    pygame.display.update()
+    
+    
+
+def get_cord(game: SnakeGame):
+    (i, j) = game.head
+    # offset = ui.CUBE // 2
+    offset = 0
+    return (i*ui.CUBE + offset, j*ui.CUBE + offset)
+
+MAX_MOVES = 20
+def get_radius(game: SnakeGame):
+    total_move = game.total_moves
+    full_rad = ui.CUBE // 2
+    rad = (full_rad // MAX_MOVES) * total_move
+    return rad
