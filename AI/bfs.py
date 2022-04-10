@@ -5,19 +5,18 @@ from .utils import *
 def solve_bfs(game: sg.SnakeGame):
     states = PriorityQueue()
     root_state = Node(game, None)
-    states.put((0, root_state))
+    h = heuristic(root_state)
+    states.put((h, root_state))
 
     while not states.empty():
-        u = states.get()[1]
-        if heuristic(u) == 0:
-            return [u.move]
+        (h, node) = states.get()
+        if h == 0:
+            return [node.move]
         else:
-            next_moves = get_child_states(u)
+            next_moves = get_child_states(node)
 
             for n in next_moves:
-                if n.visited is False:
-                    n.visited = True
-                    h = heuristic(n)
-                    if h == 0:
-                        return collect_answer(n)
-                    states.put((h + 1, n))
+                h = heuristic(n)
+                if h == 0:
+                    return collect_answer(n)
+                states.put((h, n))
